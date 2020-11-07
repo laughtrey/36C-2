@@ -1,19 +1,35 @@
-#
-CXXFLAGS+=-IHeader -std=c++17 -Wall -Werror
-CXXSOURCE=$(wildcard Source/*.cxx)
-CXXOBJS=$(patsubst %.cc,%.o,$(CXXSOURCE))
+CC=g++
+DEV=-Wall -g -std=c++14
+OPT=-O3 -std=c++14
 
-consistentresultverification: $(CXXOBJS)
-	    $(CXX) $(LDFLAGS) -o $@ $^
+JSON=json.hpp
 
-run :
-	@echo "Running the program:"
-	@./consistentresultverification SampleExample.json AlmostSampleExample.json
+all: consistentresultverification sortedverification timealgorithms
 
-edit:
-	@vim ./main.cpp
+consistentresultverification: consistentresultverification.cxx
+	g++ -std=c++14 consistentresultverification.cxx -o consistentresultverification
 
+sortedverification: sortedverification.cxx
+	g++ -std=c++14 sortedverification.cxx -o sortedverification
 
-clean :
-	@rm -f consistentresultverification
-	@rm -f Source/*.o
+timealgorithms: timealgorithms.cxx insertionsort.o mergesort.o quicksort.o
+	g++ -std=c++14 timealgorithms.cxx insertionsort.o mergesort.o quicksort.o -o timealgorithms
+
+insertionsort.o: insertionsort.cpp insertionsort.h json.hpp
+	g++ -std=c++14 -c insertionsort.cpp
+
+mergesort.o: mergesort.cpp mergesort.h json.hpp
+	g++ -std=c++14 -c mergesort.cpp
+
+quicksort.o: quicksort.cpp quicksort.h json.hpp
+	g++ -std=c++14 -c quicksort.cpp
+
+clean:
+	rm -f *.o
+	rm -rf *.dSYM
+	rm -f consistentresultverification
+	rm -f sortedverification
+	rm -f timealgorithms
+
+run:
+	@./timealgorithms TestCase1.json
