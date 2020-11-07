@@ -30,6 +30,3 @@ clean:
 	rm -f consistentresultverification
 	rm -f sortedverification
 	rm -f timealgorithms
-
-run:
-	@./timealgorithms TestCase1.json
